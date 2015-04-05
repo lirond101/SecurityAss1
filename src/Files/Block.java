@@ -8,7 +8,7 @@ public class Block {
     public char[] c_Array;
     int _size;
     int index = 0;
-    Boolean isFull = false;
+    //Boolean isFull = false;
 
     public Block(int size) {
         c_Array = new char[size];
@@ -16,9 +16,12 @@ public class Block {
     }
 
     public void add(char a) {
-        if (index<_size){
             c_Array[index] = a;
             index++;
         }
+
+    public Boolean isBlockFull(){
+        if (index == _size) return true;
+        else return false;
     }
 }

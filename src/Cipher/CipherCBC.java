@@ -11,23 +11,55 @@ import java.util.LinkedList;
  */
 public class CipherCBC {
     byte[] changedVector;
+    int _blockSize;
+    int index;
 
-
-    public CipherCBC(byte[] iv) {
+    public CipherCBC(byte[] iv, int blockSize) {
         changedVector = iv;
+        _blockSize = blockSize;
+
+        index = 0;
     }
 
     //returns a cipher code to a given plain text
-    public void EncryptText(LinkedList<String> l_sPlainText, byte[] b_key, String wPath) {
+    public void EncryptText(byte[] l_sPlainText, byte[] b_key, String wPath) {
         //b_iv = iv;
-        for (int i = 0; i < l_sPlainText.size(); i++){
-            byte[] bCurrent = l_sPlainText.get(i).getBytes();
-            byte[] toEncrypt = XorIt(bCurrent, changedVector);
-            byte[] cipherBiteText = EncryptBlock(toEncrypt, b_key);
-            changedVector = cipherBiteText;
-            WriteToFile(cipherBiteText, wPath);
+
+        int iCurrent = 0;
+        while (index < l_sPlainText.length) {
+            //for (int i = 0; i < l_sPlainText.size(); i++) {
+                byte[] bCurrent = GetCurrent(l_sPlainText, _blockSize );
+                byte[] toEncrypt = XorIt(bCurrent, changedVector);
+                byte[] cipherBiteText = EncryptBlock(toEncrypt, b_key);
+                changedVector = cipherBiteText;
+                WriteToFile(cipherBiteText, wPath);
+            //index += _blockSize;
+            //}
         }
-        }
+    }
+
+    private byte[] GetCurrent(byte[] l_sPlainText, int blockSize) {
+
+        byte [] res = new byte[blockSize];
+            if (l_sPlainText.length - index > blockSize) {
+                for (int i = 0; i < res.length; i++) {
+                    res[i] = l_sPlainText[index];
+                    System.out.println(index);
+                    index++;
+                    if (index == 353)
+                        System.out.println(index);
+                }
+            }
+            else {
+                int length = l_sPlainText.length-index;
+                for(int j=0; j<length; j++ ) {
+                    res[j] = l_sPlainText[index];
+                    System.out.println(index);
+                    index++;
+                }
+            }
+        return res;
+    }
 
     private byte[] EncryptBlock(byte[] toEncrypt, byte[] b_key) {
         byte[] encryptedBlock = new byte[10];

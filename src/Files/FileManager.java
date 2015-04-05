@@ -1,10 +1,6 @@
 package Files;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.*;
-import java.io.FileReader;
-import java.io.BufferedReader;
+import java.io.*;
 
 /**
  * Created by ����� on 03/04/2015.
@@ -18,55 +14,24 @@ public class FileManager {
     public FileManager(int blockSize) {
         this._blockSize = blockSize;
     }
-    // Read the plain text file
-    public  LinkedList<String> ReadText(String tPath) {
-        LinkedList<String> l_String = new LinkedList<String>();
-        List<Block> l_Block = new LinkedList<Block>();
+    // Read the plain text file in binary mode
+    public byte [] ReadText(String tPath) {
 
-        FileReader fr = null;
-        try {
-            fr = new FileReader(tPath);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        BufferedReader br = new BufferedReader(fr);
-        String sCurrent;
+        byte[] buffer = null;
+        File a_file = new File(tPath);
 
         try {
-            while ((sCurrent = br.readLine()) != null) {
-                for (int i = 0; i < sCurrent.toCharArray().length; i++) {
-                    if (l_Block.isEmpty()) {
-                        Block block = new Block(_blockSize);
-                        block.add(sCurrent.toCharArray()[i]);
-                        l_Block.add(block);
-                        continue;
-                    }
-                    if (i%_blockSize==0) {
-                        Block block = new Block(_blockSize);
-                        block.add(sCurrent.toCharArray()[i]);
-                        l_Block.add(block);
-                        continue;
-                    }
-                    l_Block.get(l_Block.size() - 1).add(sCurrent.toCharArray()[i]);
-                }
-            }
-            for (int i = 0; i < l_Block.size(); i++){
-                String toAdd = new String(l_Block.get(i).c_Array);
-                l_String.add(toAdd);
-            }
-
+            FileInputStream fis = new FileInputStream(tPath);
+            int length = (int) a_file.length();
+            buffer = new byte[length];
+            fis.read(buffer);
+            fis.close();
         } catch (IOException e) {
             e.printStackTrace();
-
-        } finally {
-            try {
-                if (br != null) br.close();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
         }
-        return l_String;
+        return buffer;
     }
+
 
     // Read the key from key file
     public byte[] ReadKey(String kPath) {
@@ -90,32 +55,32 @@ public class FileManager {
         try {
             if (br != null) {
                 while ((sCurrent = br.readLine()) != null) {
-                        switch (sCurrent.charAt(0)) {
-                            case 'a':
-                                key_Array[0] = sCurrent.charAt(2);
-                                continue;
-                            case 'b':
-                                key_Array[1] = sCurrent.charAt(2);
-                                continue;
-                            case 'c':
-                                key_Array[2] = sCurrent.charAt(2);
-                                continue;
-                            case 'd':
-                                key_Array[3] = sCurrent.charAt(2);
-                                continue;
-                            case 'e':
-                                key_Array[4] = sCurrent.charAt(2);
-                                continue;
-                            case 'f':
-                                key_Array[5] = sCurrent.charAt(2);
-                                continue;
-                            case 'g':
-                                key_Array[6] = sCurrent.charAt(2);
-                                continue;
-                            case 'h':
-                                key_Array[7] = sCurrent.charAt(2);
-                                continue;
-                        }
+                    switch (sCurrent.charAt(0)) {
+                        case 'a':
+                            key_Array[0] = sCurrent.charAt(2);
+                            continue;
+                        case 'b':
+                            key_Array[1] = sCurrent.charAt(2);
+                            continue;
+                        case 'c':
+                            key_Array[2] = sCurrent.charAt(2);
+                            continue;
+                        case 'd':
+                            key_Array[3] = sCurrent.charAt(2);
+                            continue;
+                        case 'e':
+                            key_Array[4] = sCurrent.charAt(2);
+                            continue;
+                        case 'f':
+                            key_Array[5] = sCurrent.charAt(2);
+                            continue;
+                        case 'g':
+                            key_Array[6] = sCurrent.charAt(2);
+                            continue;
+                        case 'h':
+                            key_Array[7] = sCurrent.charAt(2);
+                            continue;
+                    }
                     //key_Array[index] = sCurrent.charAt(sCurrent.length() - 1);
                     //index++;
                 }
