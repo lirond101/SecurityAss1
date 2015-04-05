@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component inherit-compiler-output="true" inheritJdk="true">
+	<output-test url="file://$MODULE_DIR$/out/test/SecurityAss1"/>
+	<exclude-output/>
+	<contentEntry url="file://$MODULE_DIR$"/>
+	<lib name="D:\intellijProjects\SecurityAss1\src\KeyGenerator\KeyProducer (JDK1.6).jar" scope="PROVIDED">
+		<srcroot url="file://$MODULE_DIR$/src"/>
+		<relative-module-src project-related="file://$PROJECT_DIR$/src"/>
+	</lib>
+</component>
