@@ -35,7 +35,6 @@ public class CipherCBC {
         }
     }
 
-
     public void Decryption(byte[] CipherText, byte[] b_key, String dPath){
         while (d_index <CipherText.length){
             byte[] dCurrent = GetCurrentToDecrypt(CipherText, _blockSize);
@@ -45,7 +44,6 @@ public class CipherCBC {
             WriteToFile(iDecrypted, dPath);
         }
     }
-
 
     private byte[] GetCurrentToDecrypt(byte[] cipherText, int blockSize) {
         byte [] res = new byte[blockSize];
