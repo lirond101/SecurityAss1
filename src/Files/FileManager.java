@@ -46,10 +46,7 @@ public class FileManager {
             br = new BufferedReader(fr);
         }
         String sCurrent;
-        //char [] c_Array = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
-        //String sKeyCalc = "";
         char [] key_Array = new char[8];
-        //int index = 0;
         byte[] b_Key = new byte[]{0, 0, 0, 0, 0, 0, 0, 0,};
 
         try {
@@ -81,8 +78,6 @@ public class FileManager {
                             key_Array[7] = sCurrent.charAt(2);
                             continue;
                     }
-                    //key_Array[index] = sCurrent.charAt(sCurrent.length() - 1);
-                    //index++;
                 }
                 String sKey = new String(key_Array);
                 b_Key = sKey.getBytes();
@@ -131,5 +126,7 @@ public class FileManager {
         }
         return b_IV;
     }
+
+
 }
 

@@ -8,7 +8,6 @@ public class Block {
     public char[] c_Array;
     int _size;
     int index = 0;
-    //Boolean isFull = false;
 
     public Block(int size) {
         c_Array = new char[size];

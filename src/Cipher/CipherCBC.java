@@ -4,38 +4,104 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.LinkedList;
 
 /**
  * Created by לירון on 03/04/2015.
  */
 public class CipherCBC {
     byte[] changedVector;
+    byte[] d_changedVector;
     int _blockSize;
     int index;
+    int d_index;
 
     public CipherCBC(byte[] iv, int blockSize) {
         changedVector = iv;
+        d_changedVector = iv;
         _blockSize = blockSize;
-
         index = 0;
+        d_index = 0;
     }
 
     //returns a cipher code to a given plain text
-    public void EncryptText(byte[] l_sPlainText, byte[] b_key, String wPath) {
-        //b_iv = iv;
+    public void Encryption(byte[] l_sPlainText, byte[] b_key, String wPath) {
 
-        int iCurrent = 0;
         while (index < l_sPlainText.length) {
-            //for (int i = 0; i < l_sPlainText.size(); i++) {
-                byte[] bCurrent = GetCurrent(l_sPlainText, _blockSize );
+                byte[] bCurrent = GetCurrent(l_sPlainText, _blockSize);
                 byte[] toEncrypt = XorIt(bCurrent, changedVector);
                 byte[] cipherBiteText = EncryptBlock(toEncrypt, b_key);
                 changedVector = cipherBiteText;
                 WriteToFile(cipherBiteText, wPath);
-            //index += _blockSize;
-            //}
         }
+    }
+
+
+    public void Decryption(byte[] CipherText, byte[] b_key, String dPath){
+        while (d_index <CipherText.length){
+            byte[] dCurrent = GetCurrentToDecrypt(CipherText, _blockSize);
+            byte[] decryptBiteText = DecryptBlock(dCurrent, b_key);
+            byte[] iDecrypted = XorIt(d_changedVector, decryptBiteText);
+            d_changedVector = dCurrent;
+            WriteToFile(iDecrypted, dPath);
+        }
+    }
+
+
+    private byte[] GetCurrentToDecrypt(byte[] cipherText, int blockSize) {
+        byte [] res = new byte[blockSize];
+        if (cipherText.length - d_index > blockSize) {
+            for (int i = 0; i < res.length; i++) {
+                res[i] = cipherText[d_index];
+                System.out.println(d_index);
+                d_index++;
+            }
+        }
+        else {
+            int length = cipherText.length-d_index;
+            for(int j=0; j<length; j++ ) {
+                res[j] = cipherText[d_index];
+                System.out.println(d_index);
+                d_index++;
+            }
+        }
+        return res;
+    }
+
+    private byte[] DecryptBlock(byte[] toDecrypt, byte[] b_key) {
+        byte[] decryptedBlock = new byte[10];
+        byte[] referenceKey = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
+        String sKey = new String (b_key);
+
+        for (int i = 0; i < toDecrypt.length; i++) {
+            switch (toDecrypt[i]) {
+                case 'a':
+                    decryptedBlock[i] = referenceKey[sKey.indexOf('a')];
+                    continue;
+                case 'b':
+                    decryptedBlock[i] = referenceKey[sKey.indexOf('b')];
+                    continue;
+                case 'c':
+                    decryptedBlock[i] = referenceKey[sKey.indexOf('c')];
+                    continue;
+                case 'd':
+                    decryptedBlock[i] = referenceKey[sKey.indexOf('d')];
+                    continue;
+                case 'e':
+                    decryptedBlock[i] = referenceKey[sKey.indexOf('e')];
+                    continue;
+                case 'f':
+                    decryptedBlock[i] = referenceKey[sKey.indexOf('f')];
+                    continue;
+                case 'g':
+                    decryptedBlock[i] = referenceKey[sKey.indexOf('g')];
+                    continue;
+                case 'h':
+                    decryptedBlock[i] = referenceKey[sKey.indexOf('h')];
+                    continue;
+            }
+            decryptedBlock[i] = toDecrypt[i];
+        }
+        return decryptedBlock;
     }
 
     private byte[] GetCurrent(byte[] l_sPlainText, int blockSize) {
@@ -46,8 +112,6 @@ public class CipherCBC {
                     res[i] = l_sPlainText[index];
                     System.out.println(index);
                     index++;
-                    if (index == 353)
-                        System.out.println(index);
                 }
             }
             else {
@@ -110,7 +174,6 @@ public class CipherCBC {
             boolean isExist = new File(wPath).exists();
             File file = new File(wPath);
             FileOutputStream fos  = null;
-            //File file;
 
         try {
               fos = new FileOutputStream(wPath, isExist);
@@ -136,5 +199,15 @@ public class CipherCBC {
                 System.out.println("Error while closing stream: " + ioe);
             }
         }
+    }
+
+    public int IndexOfNULL(byte [] text, String path){
+        //byte[] withNUL = ReadText(path);
+        int j = 0;
+        for(int i=text.length-1; i>-1; i--){
+            if(text[i] == '0')
+                j=i;
+        }
+        return j;
     }
 }
